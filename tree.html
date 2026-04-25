@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Binary Tree Visualization</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(120deg,#e0eafc,#cfdef3);
+    overflow:hidden;
+}
+
+/* 3D background glow */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(255,255,255,0.25), transparent 40%),
+      radial-gradient(circle at 50% 80%, rgba(255,255,255,0.25), transparent 40%);
+    z-index:-1;
+}
+
+header{
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    color:white;
+    text-align:center;
+    padding:22px;
+}
+
+.main{
+    display:grid;
+    grid-template-columns: 1.1fr 2fr;
+    gap:20px;
+    padding:20px;
+    height:calc(100vh - 100px);
+}
+
+.left-panel{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+    overflow:auto;
+}
+
+.left-panel h3{
+    color:#1e3c72;
+    margin-bottom:8px;
+}
+
+.instructions-box{
+    background:#eaf1fc;
+    border-left:5px solid #1e3c72;
+    padding:14px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#1e3c72;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    margin:6px 4px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+button:hover{
+    background:#16325c;
+    transform:scale(1.05);
+}
+
+.info-box{
+    margin-top:12px;
+    background:#f1f5f9;
+    padding:12px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+.right-panel{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+    display:flex;
+    flex-direction:column;
+}
+
+.tree-container{
+    flex:1;
+    position:relative;
+    background:#f0f4f8;
+    border-radius:12px;
+    padding:20px;
+    overflow:auto;
+}
+
+.node{
+    width:42px;
+    height:42px;
+    background:#3b82f6;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    font-weight:bold;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+    transition:0.4s;
+}
+
+.node.highlight{
+    background:#f59e0b;
+    transform:scale(1.2);
+}
+
+.line{
+    position:absolute;
+    height:2px;
+    background:#1e3c72;
+    transform-origin:left center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Binary Tree Visualization</h1>
+<p>Dynamic operations with Time & Space Complexity</p>
+</header>
+
+<div class="main">
+
+<div class="left-panel">
+
+<h3>Instructions</h3>
+<div class="instructions-box">
+<ul>
+<li>Insert values to create a Binary Search Tree.</li>
+<li>Traversal highlights visited nodes.</li>
+<li>TC & SC update automatically per operation.</li>
+</ul>
+</div>
+
+<h3 style="margin-top:14px;">Insert Node</h3>
+<input type="number" id="nodeValue" placeholder="Enter value">
+<button onclick="insertNode()">Insert</button>
+
+<h3 style="margin-top:14px;">Traversals</h3>
+<button onclick="traverse('inorder')">Inorder</button>
+<button onclick="traverse('preorder')">Preorder</button>
+<button onclick="traverse('postorder')">Postorder</button>
+
+<div class="info-box">
+<p><b>Operation:</b> <span id="op">-</span></p>
+<p><b>Time Complexity:</b> <span id="tc">-</span></p>
+<p><b>Space Complexity:</b> <span id="sc">-</span></p>
+</div>
+
+</div>
+
+<div class="right-panel">
+<h3>Tree Visualization</h3>
+<div class="tree-container" id="treeContainer"></div>
+</div>
+
+</div>
+
+<script>
+class Node{
+    constructor(v){
+        this.val=v;
+        this.left=null;
+        this.right=null;
+    }
+}
+
+let root=null;
+let nodeCount=0;
+
+function setComplexity(op,tc,sc){
+    document.getElementById("op").innerText=op;
+    document.getElementById("tc").innerText=tc;
+    document.getElementById("sc").innerText=sc;
+}
+
+function insertBST(node,val){
+    if(!node) return new Node(val);
+    if(val<node.val) node.left=insertBST(node.left,val);
+    else node.right=insertBST(node.right,val);
+    return node;
+}
+
+function insertNode(){
+    let v=document.getElementById("nodeValue").value;
+    if(v===""){alert("Enter value");return;}
+    root=insertBST(root,Number(v));
+    nodeCount++;
+    setComplexity(
+        "Insert",
+        "O(h)",
+        "O(h)"
+    );
+    document.getElementById("nodeValue").value="";
+    drawTree();
+}
+
+function traverse(type){
+    if(!root){alert("Tree empty");return;}
+    let arr=[];
+    if(type==="inorder") inorder(root,arr);
+    if(type==="preorder") preorder(root,arr);
+    if(type==="postorder") postorder(root,arr);
+
+    setComplexity(
+        type.charAt(0).toUpperCase()+type.slice(1),
+        "O(n)",
+        "O(h)"
+    );
+
+    animate(arr);
+}
+
+function inorder(n,a){ if(!n)return; inorder(n.left,a); a.push(n); inorder(n.right,a); }
+function preorder(n,a){ if(!n)return; a.push(n); preorder(n.left,a); preorder(n.right,a); }
+function postorder(n,a){ if(!n)return; postorder(n.left,a); postorder(n.right,a); a.push(n); }
+
+function animate(arr){
+    let i=0;
+    const t=setInterval(()=>{
+        if(i>0) arr[i-1].el.classList.remove("highlight");
+        if(i===arr.length){clearInterval(t);return;}
+        arr[i].el.classList.add("highlight");
+        i++;
+    },600);
+}
+
+function drawTree(){
+    const c=document.getElementById("treeContainer");
+    c.innerHTML="";
+    if(!root) return;
+
+    let q=[{n:root,x:c.offsetWidth/2,y:40}], all=[];
+    while(q.length){
+        let {n,x,y}=q.shift();
+        n.x=x; n.y=y; all.push(n);
+        if(n.left) q.push({n:n.left,x:x-80,y:y+70});
+        if(n.right) q.push({n:n.right,x:x+80,y:y+70});
+    }
+
+    all.forEach(n=>{
+        if(n.left) drawLine(c,n.x,n.y,n.left.x,n.left.y);
+        if(n.right) drawLine(c,n.x,n.y,n.right.x,n.right.y);
+    });
+
+    all.forEach(n=>{
+        const d=document.createElement("div");
+        d.className="node";
+        d.style.left=n.x+"px";
+        d.style.top=n.y+"px";
+        d.textContent=n.val;
+        c.appendChild(d);
+        n.el=d;
+    });
+}
+
+function drawLine(c,x1,y1,x2,y2){
+    const l=document.createElement("div");
+    const len=Math.hypot(x2-x1,y2-y1);
+    const ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+    l.className="line";
+    l.style.width=len+"px";
+    l.style.left=x1+"px";
+    l.style.top=y1+"px";
+    l.style.transform=`rotate(${ang}deg)`;
+    c.appendChild(l);
+}
+</script>
+
+</body>
+</html>

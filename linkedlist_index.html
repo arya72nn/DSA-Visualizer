@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Linked List | DSA Explorer</title>
+    <link rel="icon" href="fevicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(120deg, #e0eafc, #cfdef3);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header h1 {
+            font-size: 34px;
+            animation: slideInUp 1s ease-out 0.5s both;
+        }
+
+        header p {
+            margin-top: 8px;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 1s both;
+        }
+
+        .container {
+            max-width: 900px;
+            background: white;
+            margin: 40px auto;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            color: #0f766e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: "🔗";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .section p, .section li {
+            color: #333;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .section ul {
+            margin-left: 20px;
+        }
+
+        .section ul li {
+            margin-bottom: 6px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section ul li::before {
+            content: "➡️";
+            color: #14b8a6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ecfeff, #cffafe);
+            border-left: 5px solid #14b8a6;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(20, 184, 166, 0.1);
+        }
+
+        button {
+            display: block;
+            margin: 40px auto 10px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #115e59, #0f766e);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(15, 118, 110, 0.4);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 20px; margin: 20px; }
+            header { padding: 20px; }
+            header h1 { font-size: 28px; }
+            .section h2 { font-size: 20px; }
+            button { width: 100%; margin: 20px 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <header>
+        <h1><i class="fas fa-link"></i> Linked List</h1>
+        <p>Dynamic Data Structure for Efficient Memory Utilization</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>What is a Linked List?</h2>
+            <p>
+                A <b>Linked List</b> is a linear data structure where elements are stored in nodes.
+                Each node contains two parts:
+                <b>data</b> and a <b>reference (link)</b> to the next node in the sequence.
+                Unlike arrays, linked lists do not store elements in contiguous memory locations.
+            </p>
+        </div>
+
+        <div class="section highlight">
+            <h2>Types of Linked List</h2>
+            <ul>
+                <li><b>Singly Linked List</b> – Each node points to the next node</li>
+                <li><b>Doubly Linked List</b> – Nodes have both next and previous pointers</li>
+                <li><b>Circular Linked List</b> – Last node points back to the first node</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Basic Operations</h2>
+            <ul>
+                <li>Insertion (Beginning, End, Specific Position)</li>
+                <li>Deletion (Beginning, End, Specific Node)</li>
+                <li>Traversal</li>
+                <li>Searching</li>
+                <li>Reversing the Linked List</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Advantages</h2>
+            <ul>
+                <li>Dynamic size (no fixed length)</li>
+                <li>Efficient insertion and deletion</li>
+                <li>No memory wastage</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Disadvantages</h2>
+            <ul>
+                <li>Extra memory for pointers</li>
+                <li>No direct access like arrays</li>
+                <li>Traversal is slower than arrays</li>
+            </ul>
+        </div>
+
+        <div class="section highlight">
+            <h2>Time Complexity</h2>
+            <ul>
+                <li>Access: O(n)</li>
+                <li>Search: O(n)</li>
+                <li>Insertion: O(1)</li>
+                <li>Deletion: O(1)</li>
+            </ul>
+        </div>
+
+        <button onclick="window.location.href='linkedlist.html'">
+            <i class="fas fa-play"></i> Solve Linked List Questions →
+        </button>
+        <button onclick="location.href='../index.html'">
+            <i class="fas fa-arrow-left"></i> ⬅ Back to Dashboard
+        </button>
+    </div>
+
+    <script>
+        // Particles Background
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 50 },
+                "color": { "value": "#14b8a6" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "move": { "speed": 1, "random": true }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    anime({
+                        targets: entry.target,
+                        translateY: [20, 0],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Button Hover Animation
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                anime({
+                    targets: btn,
+                    scale: 1.1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+            btn.addEventListener('mouseleave', () => {
+                anime({
+                    targets: btn,
+                    scale: 1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stack Operations | DSA Explorer</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{background:linear-gradient(120deg,#e0eafc,#cfdef3);min-height:100vh;display:flex;flex-direction:column;}
+header{background:linear-gradient(135deg,#1e3c72,#2a5298);color:white;text-align:center;padding:18px;}
+header h1{font-size:28px;}
+header p{opacity:.9;font-size:14px}
+
+/* DASHBOARD */
+.dashboard{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px;
+    padding:20px;
+    flex:1;
+}
+
+/* LEFT */
+.instructions-box{
+    background:#eaf1fc;
+    border-left:6px solid #1e3c72;
+    padding:20px;
+    border-radius:12px;
+    font-size:14px;
+    line-height:1.6;
+    overflow-y:auto;
+}
+.instructions-box ul{list-style:none;padding-left:0}
+.instructions-box li{
+    margin-bottom:10px;
+    padding-left:22px;
+    position:relative;
+}
+.instructions-box li::before{
+    content:"✔";
+    position:absolute;
+    left:0;
+    color:#1e3c72;
+    font-weight:bold;
+}
+
+/* RIGHT */
+.main-panel{display:flex;flex-direction:column;gap:15px;overflow-y:auto}
+
+/* INPUTS */
+input{
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+/* BUTTONS */
+button{
+    background:#1e3c72;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    margin:4px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    transition:.2s;
+}
+button:hover{background:#16325c;transform:scale(1.05)}
+
+/* STACK */
+.stack-box{
+    background:#f1f5f9;
+    padding:15px;
+    border-radius:12px;
+}
+.stack-container{
+    display:flex;
+    flex-direction:column-reverse;
+    align-items:center;
+    min-height:200px;
+    border:2px dashed #1e3c72;
+    border-radius:12px;
+    padding:15px;
+    background:#f0f4f8;
+}
+.stack-element{
+    width:120px;
+    padding:10px;
+    margin:6px 0;
+    background:linear-gradient(145deg,#3b82f6,#2563eb);
+    color:white;
+    text-align:center;
+    border-radius:8px;
+    font-weight:bold;
+    box-shadow:0 6px 12px rgba(0,0,0,.2);
+}
+.stack-element.push{animation:pushAnim .4s}
+.stack-element.pop{animation:popAnim .4s}
+
+@keyframes pushAnim{
+    from{transform:translateY(-30px);opacity:0}
+    to{transform:none;opacity:1}
+}
+@keyframes popAnim{
+    from{opacity:1}
+    to{transform:translateY(-30px);opacity:0}
+}
+
+/* INFO */
+.info-box{
+    background:#f1f5f9;
+    padding:15px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.dashboard{grid-template-columns:1fr}
+.instructions-box{max-height:200px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Stack Operations</h1>
+<p>Push, Pop & Expression Evaluation – Single Screen View</p>
+</header>
+
+<div class="dashboard">
+
+<!-- LEFT -->
+<div class="instructions-box">
+<h3>Instructions</h3>
+<ul>
+<li>Push adds element at top (LIFO).</li>
+<li>Pop removes top element.</li>
+<li>Peek shows top without removal.</li>
+<li>Stack shown vertically with top at top.</li>
+<li>Use expressions for Infix → Postfix/Prefix.</li>
+<li>Evaluation uses stack internally.</li>
+<li>Push/Pop → O(1)</li>
+<li>Conversion/Evaluation → O(n)</li>
+</ul>
+</div>
+
+<!-- RIGHT -->
+<div class="main-panel">
+
+<h3>Enter Element</h3>
+<input id="stackInput" placeholder="Enter number">
+
+<div>
+<button onclick="pushElement()">Push</button>
+<button onclick="popElement()">Pop</button>
+<button onclick="peekElement()">Peek</button>
+<button onclick="isEmpty()">Is Empty</button>
+<button onclick="stackSize()">Size</button>
+</div>
+
+<div class="stack-box">
+<h3>Stack Visualization</h3>
+<div id="stackOutput" class="stack-container">Stack is empty</div>
+</div>
+
+<h3>Expression Operations</h3>
+<input id="exprInput" placeholder="(A+B)*C or 23*54*+9-">
+<div>
+<button onclick="convertPostfix()">Infix → Postfix</button>
+<button onclick="convertPrefix()">Infix → Prefix</button>
+<button onclick="evaluatePostfix()">Evaluate Postfix</button>
+<button onclick="evaluatePrefix()">Evaluate Prefix</button>
+</div>
+
+<div class="info-box" id="exprOutput">Result will appear here</div>
+
+<div class="info-box">
+<h3>Algorithm Explanation</h3>
+<p>Stack follows <b>LIFO</b>. All operations happen at top.</p>
+<p><b>Time:</b> <span id="timeC">—</span></p>
+<p><b>Space:</b> <span id="spaceC">—</span></p>
+</div>
+
+</div>
+</div>
+
+<script>
+let stack=[];
+
+function render(){
+const c=document.getElementById("stackOutput");
+c.innerHTML="";
+if(!stack.length){c.innerHTML="Stack is empty";return;}
+stack.forEach(v=>{
+const d=document.createElement("div");
+d.className="stack-element";
+d.textContent=v;
+c.appendChild(d);
+});
+}
+
+function pushElement(){
+update("O(1)");
+let v=stackInput.value;
+if(!v)return alert("Enter value");
+stack.push(v);
+render();
+stackOutput.lastChild.classList.add("push");
+stackInput.value="";
+}
+
+function popElement(){
+update("O(1)");
+if(!stack.length)return alert("Empty");
+let el=stackOutput.lastChild;
+el.classList.add("pop");
+setTimeout(()=>{stack.pop();render()},400);
+}
+
+function peekElement(){
+update("O(1)");
+if(!stack.length)return alert("Empty");
+alert("Top: "+stack[stack.length-1]);
+}
+
+function isEmpty(){update("O(1)");alert(stack.length?"Not Empty":"Empty")}
+function stackSize(){update("O(1)");alert("Size: "+stack.length)}
+
+function isOp(c){return "+-*/^".includes(c)}
+function prec(c){return c=="+"||c=="-"?1:c=="*"||c=="/"?2:3}
+
+function convertPostfix(){
+update("O(n)");
+let e=exprInput.value,o=[],s=[];
+for(let c of e){
+if(/[A-Za-z0-9]/.test(c))o.push(c);
+else if(c=="(")s.push(c);
+else if(c==")"){while(s.at(-1)!="(")o.push(s.pop());s.pop()}
+else if(isOp(c)){while(s.length&&prec(c)<=prec(s.at(-1)))o.push(s.pop());s.push(c)}
+}
+while(s.length)o.push(s.pop());
+exprOutput.textContent="Postfix: "+o.join("");
+}
+
+function convertPrefix(){
+update("O(n)");
+let e=exprInput.value.split("").reverse().join("")
+.replace(/\(/g,"#").replace(/\)/g,"(").replace(/#/g,")");
+let o=[],s=[];
+for(let c of e){
+if(/[A-Za-z0-9]/.test(c))o.push(c);
+else if(c=="(")s.push(c);
+else if(c==")"){while(s.at(-1)!="(")o.push(s.pop());s.pop()}
+else if(isOp(c)){while(s.length&&prec(c)<prec(s.at(-1)))o.push(s.pop());s.push(c)}
+}
+while(s.length)o.push(s.pop());
+exprOutput.textContent="Prefix: "+o.reverse().join("");
+}
+
+function evaluatePostfix(){
+update("O(n)");
+let e=exprInput.value,st=[];
+for(let c of e){
+if(/\d/.test(c))st.push(+c);
+else{
+let b=st.pop(),a=st.pop();
+st.push(eval(a+c+b));
+}}
+exprOutput.textContent="Postfix Eval: "+st[0];
+}
+
+function evaluatePrefix(){
+update("O(n)");
+let e=exprInput.value.split("").reverse().join(""),st=[];
+for(let c of e){
+if(/\d/.test(c))st.push(+c);
+else{
+let a=st.pop(),b=st.pop();
+st.push(eval(a+c+b));
+}}
+exprOutput.textContent="Prefix Eval: "+st[0];
+}
+
+function update(t){
+timeC.textContent=t;
+spaceC.textContent="O(n)";
+}
+</script>
+
+</body>
+</html>

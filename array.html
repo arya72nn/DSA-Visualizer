@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Array Traversal | DSA Explorer</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+    background: linear-gradient(120deg, #e0eafc, #cfdef3);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+header h1 { font-size: 28px; }
+header p { margin-top: 5px; opacity: 0.9; font-size: 14px; }
+
+/* GRID DASHBOARD */
+.dashboard {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: calc(100vh - 70px); /* Full height minus header */
+    gap: 20px;
+    padding: 20px;
+}
+
+/* INSTRUCTIONS */
+.instructions-box {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border-left: 6px solid #1e3c72;
+    padding: 20px;
+    border-radius: 12px;
+    color: #1e3c72;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-y: auto; /* Scroll only inside if content is large */
+}
+
+.instructions-box ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.instructions-box ul li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 24px;
+    font-weight: 500;
+}
+
+.instructions-box ul li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #1e3c72;
+    font-weight: bold;
+}
+
+/* MAIN PANEL */
+.main-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto; /* Scroll inside main panel if needed */
+}
+
+/* Inputs and buttons */
+input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+#newElement, #position { width: 48%; display: inline-block; }
+
+button {
+    background: #1e3c72;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    margin: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+button:hover { background: #16325c; transform: scale(1.05); }
+
+/* ARRAY VISUALIZATION */
+.output-box {
+    padding: 15px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    flex-grow: 1; /* Fill remaining vertical space */
+    display: flex;
+    flex-direction: column;
+}
+
+#output {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    min-height: 60px;
+    border: 2px dashed #1e3c72;
+    border-radius: 12px;
+    padding: 10px;
+    background-color: #f0f4f8;
+    overflow-y: auto;
+}
+
+.array-element {
+    width: 50px;
+    height: 35px;
+    margin: 5px;
+    background: #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.array-element.active { background: #f59e0b; transform: scale(1.2); }
+.array-element.max { background: #ef4444; }
+.array-element.min { background: #10b981; }
+
+/* INFO BOX */
+.info-box {
+    padding: 12px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+/* Make dashboard scrollable on small screens */
+@media (max-width: 900px) {
+    .dashboard { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+    .instructions-box { height: auto; max-height: 200px; margin-bottom: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Array Traversal</h1>
+    <p>Access all array operations in one screen</p>
+</header>
+
+<div class="dashboard">
+
+    <!-- LEFT: Instructions -->
+    <div class="instructions-box">
+        <h3>Instructions</h3>
+        <ul>
+            <li>Enter array elements separated by commas (e.g., 5,10,15,20).</li>
+            <li>Click <b>Traverse</b> to visit elements left to right.</li>
+            <li>Click <b>Reverse</b> to visit elements right to left.</li>
+            <li>Click <b>Max & Min</b> to highlight max (red) and min (green).</li>
+            <li>Click <b>Linear Search</b> to find a value.</li>
+            <li>Enter value & position to <b>Insert</b> an element.</li>
+            <li>Enter position to <b>Delete</b> an element.</li>
+            <li>Click <b>Bubble Sort</b> for ascending sort animation.</li>
+            <li>All elements are visualized as colored boxes.</li>
+        </ul>
+    </div>
+
+    <!-- RIGHT: Main Panel -->
+    <div class="main-panel">
+
+        <h3>Enter Array Elements</h3>
+        <input type="text" id="arrayInput" placeholder="Example: 5,10,15,20">
+
+        <div class="btn-group">
+            <button data-time="O(n)" data-space="O(1)" onclick="traverseArray()">Traverse</button>
+            <button data-time="O(n)" data-space="O(1)" onclick="reverseTraverse()">Reverse</button>
+            <button data-time="O(n)" data-space="O(1)" onclick="findMaxMin()">Max & Min</button>
+            <button data-time="O(n)" data-space="O(1)" onclick="linearSearch()">Linear Search</button>
+            <button data-time="O(n²)" data-space="O(1)" onclick="bubbleSort()">Bubble Sort</button>
+        </div>
+
+        <h3>Insert / Delete Element</h3>
+        <input type="text" id="newElement" placeholder="Element">
+        <input type="number" id="position" placeholder="Position (0-based)">
+        <button data-time="O(n)" data-space="O(1)" onclick="insertElement()">Insert</button>
+        <button data-time="O(n)" data-space="O(1)" onclick="deleteElement()">Delete</button>
+
+        <div class="output-box">
+            <h3>Array Visualization</h3>
+            <div id="output">
+                Array will appear here...
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>Algorithm Explanation</h3>
+            <p>Time Complexity: <span id="timeC">O(n)</span></p>
+            <p>Space Complexity: <span id="spaceC">O(1)</span></p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// Get array from input
+function getArray() {
+    let input = document.getElementById("arrayInput").value;
+    if (input.trim() === "") { alert("Enter array elements!"); return null; }
+    return input.split(",").map(Number);
+}
+
+// Display array as boxes
+function displayArray(arr, highlight = {}) {
+    const container = document.getElementById("output");
+    container.innerHTML = "";
+    arr.forEach((el, i) => {
+        const box = document.createElement("div");
+        box.className = "array-element";
+        box.textContent = el;
+        if (highlight.index === i && highlight.type === "active") box.classList.add("active");
+        if (highlight.type === "max" && highlight.value === el) box.classList.add("max");
+        if (highlight.type === "min" && highlight.value === el) box.classList.add("min");
+        container.appendChild(box);
+    });
+}
+
+// Traversals, MaxMin, Linear Search, Insert/Delete, BubbleSort (same as before)
+async function traverseArray() {
+    let arr = getArray(); if(!arr) return;
+    for(let i=0;i<arr.length;i++){ displayArray(arr,{index:i,type:"active"}); await new Promise(r=>setTimeout(r,400)); }
+    displayArray(arr);
+}
+async function reverseTraverse() {
+    let arr = getArray(); if(!arr) return;
+    for(let i=arr.length-1;i>=0;i--){ displayArray(arr,{index:i,type:"active"}); await new Promise(r=>setTimeout(r,400)); }
+    displayArray(arr);
+}
+function findMaxMin(){
+    let arr=getArray(); if(!arr)return;
+    let max=arr[0], min=arr[0];
+    for(let i=1;i<arr.length;i++){ if(arr[i]>max)max=arr[i]; if(arr[i]<min)min=arr[i]; }
+    displayArray(arr,{type:"max",value:max});
+    setTimeout(()=>displayArray(arr,{type:"min",value:min}),800);
+}
+async function linearSearch(){ let arr=getArray(); if(!arr)return;
+    let searchValue=prompt("Enter value to search:"); if(searchValue===null||searchValue.trim()==="")return; searchValue=Number(searchValue);
+    for(let i=0;i<arr.length;i++){ displayArray(arr,{index:i,type:"active"}); await new Promise(r=>setTimeout(r,400));
+        if(arr[i]===searchValue){ alert(`Element ${searchValue} found at index ${i}`); displayArray(arr,{index:i,type:"active"}); return; }
+    }
+    alert(`Element ${searchValue} not found`); displayArray(arr);
+}
+function insertElement(){ let arr=getArray(); if(!arr)return;
+    let value=document.getElementById("newElement").value; let pos=Number(document.getElementById("position").value);
+    if(value.trim()===""||isNaN(pos)||pos<0||pos>arr.length){ alert("Invalid element or position"); return; }
+    arr.splice(pos,0,Number(value)); document.getElementById("arrayInput").value=arr.join(","); displayArray(arr,{index:pos,type:"active"});
+}
+function deleteElement(){ let arr=getArray(); if(!arr)return;
+    let pos=Number(document.getElementById("position").value); if(isNaN(pos)||pos<0||pos>=arr.length){ alert("Invalid position"); return; }
+    arr.splice(pos,1); document.getElementById("arrayInput").value=arr.join(","); displayArray(arr);
+}
+async function bubbleSort(){ let arr=getArray(); if(!arr)return; let n=arr.length;
+    for(let i=0;i<n-1;i++){ for(let j=0;j<n-i-1;j++){ displayArray(arr,{index:j,type:"active"}); await new Promise(r=>setTimeout(r,300));
+        if(arr[j]>arr[j+1]){ let temp=arr[j]; arr[j]=arr[j+1]; arr[j+1]=temp; displayArray(arr,{index:j,type:"active"}); await new Promise(r=>setTimeout(r,300)); }
+    }} displayArray(arr);
+}
+document.querySelectorAll("button[data-time]").forEach(btn=>{ btn.addEventListener("click",()=>{ document.getElementById("timeC").innerText=btn.dataset.time; document.getElementById("spaceC").innerText=btn.dataset.space; }); });
+
+</script>
+
+</body>
+</html>

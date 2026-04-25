@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | DSA Visualizer</title>
+
+<link rel="icon" href="fevicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+        url("https://images.unsplash.com/photo-1555949963-aa79dcee981c");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    color:#fff;
+}
+
+/* ===== NAVBAR ===== */
+nav{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:18px 60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(14px);
+    z-index:100;
+}
+
+nav h2{
+    color:#00e5ff;
+    font-weight:700;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:35px;
+}
+
+nav ul li{
+    cursor:pointer;
+    font-size:0.95rem;
+    transition:0.3s;
+}
+
+nav ul li:hover{
+    color:#00e5ff;
+}
+
+/* ===== PARTICLES ===== */
+.particles span{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:#00e5ff;
+    border-radius:50%;
+    animation:float 10s linear infinite;
+    opacity:0.6;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh) scale(0); }
+    to{ transform:translateY(-10vh) scale(1); }
+}
+
+/* ===== ABOUT CONTAINER ===== */
+.about-container{
+    max-width:1000px;
+    margin:120px auto 60px;
+    padding:40px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(18px);
+    border-radius:22px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.7);
+    animation:fadeUp 1.2s ease;
+}
+
+.about-container h1{
+    font-size:2.6rem;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.about-container h1 span{
+    color:#00e5ff;
+}
+
+.about-section{
+    margin-bottom:30px;
+}
+
+.about-section h3{
+    color:#00e5ff;
+    margin-bottom:10px;
+    font-size:1.3rem;
+}
+
+.about-section p,
+.about-section ul{
+    font-size:1rem;
+    line-height:1.8;
+    opacity:0.92;
+}
+
+.about-section ul{
+    margin-left:20px;
+}
+
+.about-section ul li{
+    margin-bottom:8px;
+}
+
+/* ===== DEVELOPER CARD ===== */
+.dev-card{
+    margin-top:40px;
+    text-align:center;
+    padding:30px;
+    border-radius:18px;
+    background:rgba(0,0,0,0.35);
+    box-shadow:0 15px 40px rgba(0,229,255,0.25);
+}
+
+.dev-card h2{
+    color:#1de9b6;
+    margin-bottom:10px;
+}
+
+.dev-card p{
+    opacity:0.9;
+    font-size:0.95rem;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp{
+    from{ opacity:0; transform:translateY(40px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+    nav{ padding:15px 25px; }
+    nav ul{ display:none; }
+
+    .about-container{
+        margin:100px 15px 40px;
+        padding:25px;
+    }
+
+    .about-container h1{
+        font-size:2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <h2>DSA Visualizer</h2>
+    <ul>
+        <li onclick="location.href='index.html'">Home</li>
+        <li style="color:#00e5ff;">About</li>
+    </ul>
+</nav>
+
+<!-- PARTICLES -->
+<div class="particles">
+    <span style="left:10%; animation-duration:8s;"></span>
+    <span style="left:30%; animation-duration:12s;"></span>
+    <span style="left:50%; animation-duration:10s;"></span>
+    <span style="left:70%; animation-duration:9s;"></span>
+    <span style="left:90%; animation-duration:11s;"></span>
+</div>
+
+<!-- ABOUT CONTENT -->
+<div class="about-container">
+
+    <h1>About <span>DSA Visualizer</span></h1>
+
+    <div class="about-section">
+        <h3>📌 Project Overview</h3>
+        <p>
+            DSA Visualizer is an interactive learning platform designed to help students
+            understand Data Structures and Algorithms using clear visual representations.
+            Instead of memorizing concepts, users can see how operations work internally.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h3>🎯 Purpose</h3>
+        <p>
+            The main objective of this project is to simplify complex DSA concepts and make
+            learning more engaging, especially for beginners and college students.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h3>🧠 What You Learn</h3>
+        <ul>
+            <li>Queue operations with visualization</li>
+            <li>Binary Tree insertion and traversals</li>
+            <li>Step-by-step animated operations</li>
+            <li>Understanding Time & Space Complexity</li>
+        </ul>
+    </div>
+
+    <div class="about-section">
+        <h3>🛠️ Technologies Used</h3>
+        <ul>
+            <li>HTML5 – Structure</li>
+            <li>CSS3 – Styling & Animations</li>
+            <li>JavaScript – Logic & Visualization</li>
+        </ul>
+    </div>
+
+    <div class="about-section">
+        <h3>🚀 Future Scope</h3>
+        <p>
+            More data structures like Stack, Linked List, Graphs, and Sorting algorithms
+            can be added along with user progress tracking and practice mode.
+        </p>
+    </div>
+
+    <!-- DEVELOPER -->
+    <div class="dev-card">
+        <h2>👩‍💻 Developed By</h2>
+        <p><b>Aryan verma & Anshita Rajput</b></p>
+        <p>Passionate Learner | Web Developer | DSA Enthusiast</p>
+    </div>
+
+</div>
+
+</body>
+</html>

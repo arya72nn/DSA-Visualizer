@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Graph Visualization | DSA Explorer</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif; }
+body { background: linear-gradient(120deg,#e0e7ff,#f8fafc); height:100vh; display:flex; flex-direction:column; }
+
+header { background: linear-gradient(135deg,#1e3a8a,#2563eb); color:white; text-align:center; padding:15px; }
+header h1 { font-size:28px; }
+header p { margin-top:5px; opacity:0.9; font-size:14px; }
+
+/* GRID LAYOUT */
+.dashboard {
+    display:grid;
+    grid-template-columns:300px 1fr;
+    height:calc(100vh - 70px);
+    gap:20px;
+    padding:20px;
+}
+
+/* INSTRUCTIONS PANEL */
+.instructions-box {
+    background: #eef2ff;
+    border-left:6px solid #2563eb;
+    padding:20px;
+    border-radius:12px;
+    color:#1e3a8a;
+    font-size:14px;
+    line-height:1.6;
+    overflow-y:auto;
+}
+.instructions-box ul { list-style:none; padding-left:0; }
+.instructions-box ul li { margin-bottom:10px; padding-left:24px; position:relative; font-weight:500; }
+.instructions-box ul li::before { content:"✔"; position:absolute; left:0; top:0; color:#1e3a8a; font-weight:bold; }
+
+/* MAIN PANEL */
+.main-panel { display:flex; flex-direction:column; gap:15px; overflow-y:auto; }
+
+/* CONTROLS */
+.controls input, .controls select { padding:8px; margin:5px 5px 10px 0; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+.controls button { background:#2563eb; color:white; border:none; padding:8px 14px; margin:4px; border-radius:6px; cursor:pointer; transition:0.2s; font-size:13px; }
+.controls button:hover { background:#1e40af; transform:scale(1.05); }
+
+/* GRAPH AREA */
+.graph-area {
+    margin-top:15px;
+    padding:20px;
+    background:#f8fafc;
+    border:2px dashed #94a3b8;
+    border-radius:12px;
+    min-height:350px;
+    position:relative;
+    overflow:auto;
+    width:100%;
+}
+.node {
+    width:40px; height:40px; border-radius:50%;
+    background:#3b82f6; color:white; display:flex;
+    justify-content:center; align-items:center; font-weight:bold;
+    position:absolute; cursor:pointer; transition:0.4s;
+}
+.node.visited { background:#10b981; }
+.node.current { background:#f59e0b; transform:scale(1.2); }
+
+.edge { position:absolute; height:2px; background:#1e3a8a; transform-origin:0 0; }
+.edge.arrow::after {
+    content:''; position:absolute; width:0; height:0;
+    border-left:8px solid #1e3a8a; border-top:4px solid transparent; border-bottom:4px solid transparent;
+    right:0; top:-3px;
+}
+
+/* OUTPUT BOX */
+.output-box { padding:12px; background:#f1f5f9; border-radius:12px; font-size:13px; }
+
+/* INFO BOX */
+.info-box { padding:12px; background:#f1f5f9; border-radius:12px; font-size:13px; }
+
+/* RESPONSIVE */
+@media (max-width:900px){
+    .dashboard { grid-template-columns:1fr; grid-template-rows:auto 1fr; height:auto; }
+    .instructions-box { max-height:200px; margin-bottom:15px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Graph Visualization</h1>
+<p>Add nodes, connect edges, and visualize traversals</p>
+</header>
+
+<div class="dashboard">
+
+    <!-- LEFT: Instructions -->
+    <div class="instructions-box">
+        <h3>Instructions</h3>
+        <ul>
+            <li>Add nodes with unique names or numbers.</li>
+            <li>Drag & fix node positions <b>before creating edges</b>.</li>
+            <li>Create edges: specify From Node, To Node, and Weight if weighted.</li>
+            <li>Select Directed/Undirected and Weighted/Unweighted types.</li>
+            <li>Use <b>DFS</b> or <b>BFS</b> to visualize traversal.</li>
+            <li>Green node → Visited, Yellow → Currently processing.</li>
+            <li>Click <b>Clear Graph</b> to reset.</li>
+        </ul>
+    </div>
+
+    <!-- RIGHT: Main Panel -->
+    <div class="main-panel">
+
+        <!-- Controls -->
+        <div class="controls">
+            <select id="graphType">
+                <option value="undirected">Undirected Graph</option>
+                <option value="directed">Directed Graph</option>
+            </select>
+            <select id="weightType">
+                <option value="unweighted">Unweighted Graph</option>
+                <option value="weighted">Weighted Graph</option>
+            </select>
+
+            <input type="text" id="nodeName" placeholder="Node Name">
+            <button onclick="addNode()">Add Node</button><br>
+
+            <input type="text" id="edgeFrom" placeholder="From Node">
+            <input type="text" id="edgeTo" placeholder="To Node">
+            <input type="number" id="edgeWeight" placeholder="Weight" style="display:none;width:80px;">
+            <button onclick="addEdge()">Add Edge</button><br>
+
+            <button onclick="clearGraph()">Clear Graph</button>
+        </div>
+
+        <!-- Traversal -->
+        <div>
+            <h3>Graph Traversal</h3>
+            <button onclick="startDFS()">DFS</button>
+            <button onclick="startBFS()">BFS</button>
+            <div id="traversalOutput" class="output"></div>
+        </div>
+
+        <!-- Graph Visualization -->
+        <div class="graph-area" id="graph"></div>
+
+        <!-- Algorithm Info -->
+        <div class="info-box">
+            <h3>Algorithm Explanation</h3>
+            <p id="algoText">This section explains the working and complexity of the selected graph algorithm.</p>
+            <p><b>Time Complexity:</b> <span id="timeC">—</span></p>
+            <p><b>Space Complexity:</b> <span id="spaceC">—</span></p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+let nodes = {}; 
+let graphArea = document.getElementById("graph");
+
+/* Add Node */
+function addNode(){
+    let name = document.getElementById("nodeName").value.trim();
+    if(!name) return alert("Enter node name");
+    if(nodes[name]) return alert("Node exists");
+    let nodeDiv = document.createElement("div");
+    nodeDiv.className="node"; nodeDiv.id="node-"+name; nodeDiv.textContent=name;
+    nodeDiv.style.left=Math.random()*(graphArea.clientWidth-50)+"px";
+    nodeDiv.style.top=Math.random()*(graphArea.clientHeight-50)+"px";
+    graphArea.appendChild(nodeDiv);
+    nodes[name]={div:nodeDiv,edges:[]};
+    document.getElementById("nodeName").value="";
+    makeNodeDraggable(nodeDiv,name);
+}
+
+/* Add Edge */
+function addEdge(){
+    let from=edgeFrom.value.trim();
+    let to=edgeTo.value.trim();
+    if(!nodes[from]||!nodes[to]) return alert("Both nodes must exist");
+    let isDirected=document.getElementById("graphType").value==="directed";
+    let isWeighted=document.getElementById("weightType").value==="weighted";
+    let weight=isWeighted?edgeWeight.value:null;
+    nodes[from].edges.push({to,weight});
+    if(!isDirected) nodes[to].edges.push({to:from,weight});
+    drawEdge(from,to,isDirected,weight);
+    edgeFrom.value=""; edgeTo.value=""; edgeWeight.value="";
+}
+
+/* Draw Edge */
+function drawEdge(from,to,isDirected,weight){
+    let f=nodes[from].div.getBoundingClientRect();
+    let t=nodes[to].div.getBoundingClientRect();
+    let area=graphArea.getBoundingClientRect();
+    let x1=f.left+f.width/2-area.left;
+    let y1=f.top+f.height/2-area.top;
+    let x2=t.left+t.width/2-area.left;
+    let y2=t.top+t.height/2-area.top;
+    let len=Math.hypot(x2-x1,y2-y1);
+    let angle=Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+    let edge=document.createElement("div");
+    edge.className="edge";
+    if(isDirected) edge.classList.add("arrow");
+    edge.style.width=len+"px";
+    edge.style.left=x1+"px"; edge.style.top=y1+"px";
+    edge.style.transform=`rotate(${angle}deg)`;
+    graphArea.appendChild(edge);
+
+    if(weight!==null){
+        let label=document.createElement("span");
+        label.textContent=weight;
+        label.style.position="absolute";
+        label.style.left=(x1+x2)/2+"px";
+        label.style.top=(y1+y2)/2+"px";
+        label.style.color="#1e3a8a";
+        graphArea.appendChild(label);
+    }
+}
+
+/* DFS */
+async function startDFS(){
+    updateComplexity("O(V+E)","O(V)");
+    resetNodes();
+    let start=Object.keys(nodes)[0]; if(!start){alert("No nodes"); return;}
+    let visited={}; let order=[];
+    async function dfs(node){
+        visited[node]=true;
+        let div=nodes[node].div;
+        div.classList.add("current");
+        await sleep(700);
+        div.classList.remove("current");
+        div.classList.add("visited");
+        order.push(node);
+        for(let edge of nodes[node].edges){ let n=edge.to; if(!visited[n]) await dfs(n);}
+    }
+    await dfs(start);
+    document.getElementById("traversalOutput").innerText="DFS Order: "+order.join(" → ");
+}
+
+/* BFS */
+async function startBFS(){
+    updateComplexity("O(V+E)","O(V)");
+    resetNodes();
+    let start=Object.keys(nodes)[0]; if(!start){alert("No nodes"); return;}
+    let queue=[start]; let visited={}; visited[start]=true; let order=[];
+    while(queue.length>0){
+        let current=queue.shift();
+        let div=nodes[current].div;
+        div.classList.add("current"); await sleep(700);
+        div.classList.remove("current"); div.classList.add("visited");
+        order.push(current);
+        for(let edge of nodes[current].edges){
+            let n=edge.to; if(!visited[n]){ visited[n]=true; queue.push(n);}
+        }
+    }
+    document.getElementById("traversalOutput").innerText="BFS Order: "+order.join(" → ");
+}
+
+/* Utils */
+function clearGraph(){ nodes={}; graphArea.innerHTML=""; document.getElementById("traversalOutput").textContent=""; }
+document.getElementById("weightType").addEventListener("change",()=>{ document.getElementById("edgeWeight").style.display=document.getElementById("weightType").value==="weighted"?"inline-block":"none"; });
+function makeNodeDraggable(div,name){
+    let dragging=false,offsetX,offsetY;
+    div.addEventListener("mousedown",(e)=>{ dragging=true; offsetX=e.clientX-div.offsetLeft; offsetY=e.clientY-div.offsetTop; div.style.cursor="grabbing"; });
+    document.addEventListener("mousemove",(e)=>{ if(!dragging) return; div.style.left=(e.clientX-offsetX)+"px"; div.style.top=(e.clientY-offsetY)+"px"; redrawEdges(); });
+    document.addEventListener("mouseup",()=>{ dragging=false; div.style.cursor="pointer"; });
+}
+function redrawEdges(){
+    document.querySelectorAll(".edge, .weight-label").forEach(e=>e.remove());
+    for(let from in nodes){ nodes[from].edges.forEach(edge=>drawEdge(from,edge.to,document.getElementById("graphType").value==="directed",edge.weight)); }
+}
+function resetNodes(){ for(let key in nodes) nodes[key].div.classList.remove("visited","current"); document.getElementById("traversalOutput").innerText=""; }
+function updateComplexity(time,space){ document.getElementById("timeC").textContent=time; document.getElementById("spaceC").textContent=space; }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA Explorer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<link rel="icon" href="fevicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+}
+
+/* HEADER */
+header {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* NAVBAR */
+nav {
+    background-color: #1f2933;
+    padding: 12px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 15px;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+nav a:hover {
+    background-color: #3b82f6;
+}
+
+/* CONTENT */
+.content {
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.content h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ff00c3;
+}
+
+/* CARDS */
+.card-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    width: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: #2a5298;
+}
+
+.card p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* FOOTER */
+footer {
+    background-color: #1f2933;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    margin-top: 40px;
+}
+/* BUTTON STYLE */
+.btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 18px;
+    background-color: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #2563eb;
+}
+
+/* HOME PAGE CARD ADJUSTMENT */
+.card {
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 20px;
+}
+
+.card p {
+    font-size: 14px;
+}
+/* Particles Background */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Mode Toggle Button */
+.mode-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: #3b82f6;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 1000;
+    color: #fff;
+    box-shadow: 0 0 10px #3b82f6;
+    animation: glow 3s infinite alternate;
+    transition: background 0.3s;
+}
+.mode-btn:hover { background: #2563eb; }
+
+/* Hero Animations */
+.hero-header {
+    animation: fadeIn 1s ease-in-out;
+}
+.hero-text {
+    animation: slideInUp 1s ease-out 0.5s both;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* 3D Card Effects */
+.card {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+
+/* Glowing Effects */
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 10px #3b82f6; }
+    50% { box-shadow: 0 0 20px #3b82f6, 0 0 30px #3b82f6; }
+}
+.card:hover {
+    box-shadow: 0 0 20px #3b82f6, 0 0 40px #3b82f6;
+}
+.btn:hover {
+    box-shadow: 0 0 15px #3b82f6;
+}
+
+/* Fade-In Animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Light Mode */
+body.light {
+    background: linear-gradient(135deg, #f4f6f8, #e0e0e0);
+    color: #333;
+}
+body.light header {
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
+}
+body.light nav {
+    background-color: #e5e7eb;
+}
+body.light nav a {
+    color: #1f2937;
+}
+body.light nav a:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+body.light .card {
+    background: white;
+    color: #333;
+}
+body.light .card h3 {
+    color: #1e3c72;
+}
+body.light footer {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+body.light .mode-btn {
+    background: #f59e0b;
+    box-shadow: 0 0 10px #f59e0b;
+}
+body.light .mode-btn:hover { background: #d97706; }
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    #particles-js { display: none; }
+    .card { width: 100%; max-width: 300px; }
+    .card:hover { transform: scale(1.02); } /* Reduce 3D on mobile */
+}
+/* Progress Bar */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #1e40af);
+    width: 0%;
+    z-index: 1001;
+    transition: width 0.3s ease;
+}
+
+/* Search Bar */
+.search-container {
+    margin-top: 20px;
+    text-align: center;
+}
+.search-container input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #3b82f6;
+    border-radius: 25px;
+    outline: none;
+    font-size: 16px;
+}
+.search-container button {
+    padding: 10px 15px;
+    background: #3b82f6;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+.search-container button:hover { background: #2563eb; }
+
+/* Code Preview */
+.code-preview {
+    margin-top: 15px;
+    background: rgba(0,0,0,0.8);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #00ff88;
+    overflow-x: auto;
+}
+.code-preview pre { margin: 0; }
+
+/* Enhanced Card Hover */
+.card:hover .code-preview {
+    animation: pulse 1s infinite;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Light Mode Updates */
+body.light .progress-bar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+body.light .search-container input { border-color: #f59e0b; }
+body.light .search-container button { background: #f59e0b; }
+body.light .search-container button:hover { background: #d97706; }
+body.light .code-preview { background: rgba(255,255,255,0.9); color: #1f2937; }
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .search-container input { width: 250px; }
+    .card:hover { transform: scale(1.02); } /* Reduce 3D */
+    #particles-js { display: none; }
+}
+/* Mode Button with Logo */
+.mode-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: #3b82f6;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.4rem;
+    z-index: 1000;
+    color: #fff;
+    box-shadow: 0 0 15px #3b82f6;
+    animation: glow 3s infinite alternate;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mode-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #3b82f6;
+}
+
+/* Theme Classes */
+body.dark {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
+}
+body.dark header { background: linear-gradient(135deg, #1e3c72, #2a5298); }
+body.dark .card { background: rgba(0,0,0,0.4); color: #fff; }
+body.dark .progress-bar { background: linear-gradient(90deg, #3b82f6, #1e40af); }
+
+body.light {
+    background: linear-gradient(135deg, #f4f6f8, #e0e0e0);
+    color: #333;
+}
+body.light header { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+body.light .card { background: white; color: #333; }
+body.light .progress-bar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+
+body.neon {
+    background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+    color: #00ff88;
+}
+body.neon header { background: linear-gradient(135deg, #ff0080, #8000ff); }
+body.neon .card { background: rgba(255,0,136,0.1); border: 1px solid #00ff88; color: #00ff88; }
+body.neon .progress-bar { background: linear-gradient(90deg, #00ff88, #ff0080); }
+body.neon .mode-btn { background: #ff0080; box-shadow: 0 0 20px #ff0080; }
+
+body.ocean {
+    background: linear-gradient(135deg, #0077be, #00a8cc);
+    color: #fff;
+}
+body.ocean header { background: linear-gradient(135deg, #0077be, #00a8cc); }
+body.ocean .card { background: rgba(255,255,255,0.2); color: #fff; }
+body.ocean .progress-bar { background: linear-gradient(90deg, #00a8cc, #0077be); }
+body.ocean .mode-btn { background: #00a8cc; box-shadow: 0 0 20px #00a8cc; }
+
+/* Glow for Neon Theme */
+body.neon .card:hover { box-shadow: 0 0 30px #00ff88; }
+body.neon .btn:hover { box-shadow: 0 0 20px #ff0080; }
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: slideIn 0.3s ease;
+}
+
+.close-btn {
+    color: #fff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover { color: #3b82f6; }
+
+#fact-title { color: #3b82f6; margin-bottom: 15px; }
+
+#fact-text { font-size: 16px; line-height: 1.6; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Light Mode Adjustments */
+body.light .modal-content { background: linear-gradient(135deg, #f4f6f8, #e0e0e0); color: #333; }
+body.light #fact-title { color: #1e3c72; }
+
+/* Neon/Ocean Theme Adjustments */
+body.neon .modal-content { background: linear-gradient(135deg, #ff0080, #8000ff); }
+body.neon #fact-title { color: #00ff88; }
+body.ocean .modal-content { background: linear-gradient(135deg, #0077be, #00a8cc); }
+body.ocean #fact-title { color: #00a8cc; }
+#quiz-options button { margin: 10px; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer; }
+#quiz-options button:hover { background: #2563eb; }
+#next-btn, #quiz-result button { margin-top: 20px; padding: 10px 20px; background: #00ffd5; color: #000; border: none; border-radius: 5px; cursor: pointer; }
+#next-btn:hover, #quiz-result button:hover { background: #00b8a9; }
+.viz-canvas { background: #f4f6f8; }
+/* Quiz Modal */
+.quiz-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    animation: fadeIn 0.5s ease;
+}
+
+.quiz-container {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    position: relative;
+    animation: slideIn 0.5s ease;
+}
+
+.quiz-header h2 {
+    margin-bottom: 20px;
+    color: #00ffd5;
+}
+
+.quiz-progress {
+    margin-bottom: 15px;
+}
+
+.progress-bar-quiz {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ffd5, #3b82f6);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.quiz-score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ffd5;
+    margin-bottom: 10px;
+}
+
+.timer {
+    font-size: 16px;
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.quiz-question h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.quiz-options button {
+    padding: 15px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.quiz-options button:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.quiz-options button.correct {
+    background: #4caf50;
+    animation: bounce 0.5s ease;
+}
+
+.quiz-options button.incorrect {
+    background: #f44336;
+    animation: shake 0.5s ease;
+}
+
+.next-btn {
+    padding: 12px 25px;
+    background: #00ffd5;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.next-btn:hover {
+    background: #00b8a9;
+}
+
+.quiz-result h3 {
+    color: #00ffd5;
+    margin-bottom: 10px;
+}
+
+.result-stars {
+    font-size: 30px;
+    margin: 20px 0;
+}
+
+.restart-btn {
+    padding: 12px 25px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.restart-btn:hover {
+    background: #e53935;
+}
+
+.close-quiz {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-quiz:hover {
+    color: #ff6b6b;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Theme Adjustments */
+body.light .quiz-container { background: linear-gradient(135deg, #f4f6f8, #e0e0e0); color: #333; }
+body.neon .quiz-container { background: linear-gradient(135deg, #ff0080, #8000ff); }
+body.ocean .quiz-container { background: linear-gradient(135deg, #0077be, #00a8cc); }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .quiz-container { padding: 20px; width: 95%; }
+}
+.interview-btn{
+    margin-top:15px;
+    padding:14px 26px;
+    border:none;
+    border-radius:30px;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+
+    background:linear-gradient(135deg,#ffb703,#ffd166);
+    color:#000;
+
+    box-shadow:0 0 25px rgba(255,183,3,0.6);
+    transition:0.3s;
+}
+
+.interview-btn:hover{
+    transform:scale(1.06);
+    box-shadow:0 0 45px rgba(255,183,3,0.9);
+}
+.controls.below-content{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:60px 0 80px;   /* space above & below */
+}
+.controls.below-content{
+    padding-top:40px;
+    border-top:1px solid rgba(255,255,255,0.1);
+}
+
+</style>
+<body> 
+
+<div id="particles-js"></div>
+   <button class="mode-btn" onclick="cycleTheme()" id="theme-btn">
+    <i class="fa-solid fa-moon" id="theme-icon"></i> <!-- Icon changes with theme -->
+</button>
+    <div class="progress-bar" id="progress-bar"></div> <!-- Scroll progress -->
+
+    <header class="hero-header">
+        <div class="logo">🧠 DSA Explorer</div>
+        <p class="hero-text">Learn Data Structure Algorithms with Real Examples</p>
+        
+    </header>
+<nav>
+    <a href="#" onclick="startQuiz()">🧠 Quiz</a>
+    <a>📦 Array</a>
+    <a>🖇️ Linked List</a>
+    <a>📚 Stack</a>
+    <a>🚶 Queue</a>
+    <a>🌳 Tree</a>
+    <a>🕸 Graph</a>
+</nav>
+
+<section class="content">
+    <h2>Explore Data Structure Algorithms</h2>
+
+    <div class="card-container">
+        <div class="card fade-in" data-topic="array">
+            <h3>📦 Array</h3>
+            <p>Learn array traversal, searching, and basic operations used in real programming problems.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: Array Traversal
+                           for(int i = 0; i < n; i++) {
+                           cout << arr[i] << " ";
+                           }
+                        </code></pre>
+            </div>
+            <a href="array_index.html" class="btn">Explore</a>
+        </div>
+        <div class="card fade-in" data-topic="linkedlist">
+            <h3>🖇️ Linked List</h3>
+            <p>Visualize insertion, deletion, traversal, and circular/doubly linked list operations with interactive animations.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: Insert Node
+                          Node* newNode = new Node(data);
+                          newNode->next = head;
+                          head = newNode;</code></pre>
+            </div>
+            <a href="linkedlist_index.html" class="btn">Explore</a>
+        </div>
+        <div class="card fade-in" data-topic="stack">
+            <h3>📚 Stack</h3>
+            <p>Understand stack operations like push and pop with real-life examples.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: Push
+                             stack.push(element);</code></pre>
+            </div>
+            <a href="stack_index.html" class="btn">Explore</a>
+        </div>
+        <div class="card fade-in" data-topic="queue">
+            <h3>🚶 Queue</h3>
+            <p>Learn queue and circular queue used in scheduling and real-world systems.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: Enqueue
+queue.push(element);</code></pre>
+            </div>
+            <a href="queue_index.html" class="btn">Explore</a>
+        </div>
+        <div class="card fade-in" data-topic="tree">
+            <h3>🌳 Tree</h3>
+            <p>Visualize tree traversals like Inorder, Preorder, and Postorder.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: Inorder Traversal
+void inorder(Node* root) {
+    if (root) {
+        inorder(root->left);
+        cout << root->data;
+        inorder(root->right);
+    }
+}</code></pre>
+            </div>
+            <a href="tree_index.html" class="btn">Explore</a>
+        </div>
+        <div class="card fade-in" data-topic="graph">
+            <h3>🕸 Graph</h3>
+            <p>Learn BFS and DFS algorithms used in maps and networking.</p>
+            <div class="code-preview" style="display: none;">
+                <pre><code>// Example: BFS
+queue.push(start);
+visited[start] = true;</code></pre>
+            </div>
+            <a href="graph_index.html" class="btn">Explore</a>
+        </div>
+    </div>
+   
+
+
+ 
+  <div id="quiz-section" class="quiz-modal" style="display: none;">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h2>🧠 DSA Quiz Challenge</h2>
+            <div class="quiz-progress">
+                <span id="question-number">Question 1/5</span>
+                <div class="progress-bar-quiz">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="quiz-score">Score: <span id="current-score">0</span>/5</div>
+            <div class="timer">Time Left: <span id="timer">30</span>s</div>
+        </div>
+        <div id="quiz-question" class="quiz-question"></div>
+        <div id="quiz-options" class="quiz-options"></div>
+        <button id="next-btn" class="next-btn" style="display: none;" onclick="nextQuestion()">Next Question</button>
+        <div id="quiz-result" class="quiz-result" style="display: none;">
+            <h3 id="result-title">Quiz Complete!</h3>
+            <p id="result-message"></p>
+            <div class="result-stars" id="result-stars"></div>
+            <button onclick="restartQuiz()" class="restart-btn">Play Again</button>
+        </div>
+        <button onclick="closeQuiz()" class="close-quiz">✕</button>
+    </div>
+</div>
+</section>
+
+<footer>
+    <p>© 2026 DSA Explorer | BCA Mini Project</p>
+</footer>
+
+<script>
+// Theme cycling
+let currentTheme = 0;
+const themes = ['dark', 'light', 'neon', 'ocean'];
+const icons = ['fa-moon', 'fa-sun', 'fa-star', 'fa-water'];
+
+function cycleTheme() {
+    document.body.classList.remove(...themes);
+    currentTheme = (currentTheme + 1) % themes.length;
+    document.body.classList.add(themes[currentTheme]);
+    const iconElement = document.getElementById('theme-icon');
+    iconElement.className = `fa-solid ${icons[currentTheme]}`;
+    updateParticlesColor(themes[currentTheme]);
+}
+
+function updateParticlesColor(theme) {
+    const colorMap = { dark: '#3b82f6', light: '#f59e0b', neon: '#00ff88', ocean: '#00a8cc' };
+    particlesJS('particles-js', {
+        "particles": { "number": { "value": 60 }, "color": { "value": colorMap[theme] }, "shape": { "type": "circle" }, "opacity": { "value": 0.5 }, "size": { "value": 3 }, "move": { "speed": 1, "random": true } },
+        "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "repulse" } } }
+    });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('dark');
+    updateParticlesColor('dark');
+});
+
+// Scroll progress
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    document.getElementById('progress-bar').style.width = scrollPercent + '%';
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            anime({
+                targets: entry.target,
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutQuad'
+            });
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.fade-in').forEach(card => {
+    observer.observe(card);
+    card.addEventListener('mouseenter', () => {
+        const preview = card.querySelector('.code-preview');
+        if (preview) {
+            preview.style.display = 'block';
+            anime({ targets: preview, opacity: [0, 1], duration: 300 });
+        }
+    });
+    card.addEventListener('mouseleave', () => {
+        const preview = card.querySelector('.code-preview');
+        if (preview) {
+            anime({
+                targets: preview,
+                opacity: [1, 0],
+                duration: 300,
+                complete: () => preview.style.display = 'none'
+            });
+        }
+    });
+});
+
+// Quiz Data with Icons
+const quizQuestions = [
+    { question: "📚 What does LIFO stand for in stacks?", options: ["Last In First Out", "Last In First On", "Linear In First Out", "Linear In First On"], answer: 0 },
+    { question: "🚶 Which data structure uses FIFO?", options: ["Stack", "Queue", "Tree", "Graph"], answer: 1 },
+    { question: "📦 In arrays, what is the index of the first element?", options: ["1", "0", "-1", "n"], answer: 1 },
+    { question: "🔍 What is the time complexity of binary search?", options: ["O(n)", "O(log n)", "O(n^2)", "O(1)"], answer: 1 },
+    { question: "🌳 Which traversal visits left subtree, root, right subtree?", options: ["Preorder", "Inorder", "Postorder", "Levelorder"], answer: 1 }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+let timerInterval;
+let timeLeft = 30;
+
+function startQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    timeLeft = 30;
+    document.getElementById('quiz-section').style.display = 'flex';
+    document.getElementById('quiz-result').style.display = 'none';
+    showQuestion();
+    startTimer();
+}
+
+function showQuestion() {
+    const question = quizQuestions[currentQuestionIndex];
+    document.getElementById('quiz-question').innerHTML = `<h3>${question.question}</h3>`;
+    document.getElementById('question-number').textContent = `Question ${currentQuestionIndex + 1}/${quizQuestions.length}`;
+    document.getElementById('progress-fill').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+    document.getElementById('current-score').textContent = score;
+    const optionsHtml = question.options.map((option, index) => `<button onclick="selectAnswer(${index})">${option}</button>`).join('');
+    document.getElementById('quiz-options').innerHTML = optionsHtml;
+    document.getElementById('next-btn').style.display = 'none';
+    resetTimer();
+}
+
+function selectAnswer(selectedIndex) {
+    const question = quizQuestions[currentQuestionIndex];
+    const buttons = document.querySelectorAll('#quiz-options button');
+    buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === question.answer) {
+            btn.classList.add('correct');
+        } else if (idx === selectedIndex && idx !== question.answer) {
+            btn.classList.add('incorrect');
+        }
+    });
+    if (selectedIndex === question.answer) {
+        score++;
+        document.getElementById('current-score').textContent = score;
+    }
+    clearInterval(timerInterval);
+    document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizQuestions.length) {
+        showQuestion();
+        startTimer();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    clearInterval(timerInterval);
+    document.getElementById('quiz-question').style.display = 'none';
+    document.getElementById('quiz-options').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    const percentage = (score / quizQuestions.length) * 100;
+    let message = '';
+    let stars = '';
+    if (percentage >= 80) {
+        message = 'Excellent! You\'re a DSA master!';
+        stars = '⭐⭐⭐⭐⭐';
+    } else if (percentage >= 60) {
+        message = 'Good job! Keep practicing!';
+        stars = '⭐⭐⭐⭐';
+    } else {
+        message = 'Nice try! Review the topics and try again!';
+        stars = '⭐⭐⭐';
+    }
+    document.getElementById('result-title').textContent = `Your Score: ${score}/${quizQuestions.length}`;
+    document.getElementById('result-message').textContent = message;
+    document.getElementById('result-stars').textContent = stars;
+    document.getElementById('quiz-result').style.display = 'block';
+    anime({
+        targets: '#quiz-result',
+        scale: [0, 1],
+        duration: 500,
+        easing: 'easeOutBounce'
+    });
+}
+
+function restartQuiz() {
+    document.getElementById('quiz-section').style.display = 'none';
+}
+
+function closeQuiz() {
+    document.getElementById('quiz-section').style.display = 'none';
+    clearInterval(timerInterval);
+}
+
+function startTimer() {
+    timeLeft = 30;
+    document.getElementById('timer').textContent = timeLeft;
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            nextQuestion(); // Auto-advance if time runs out
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    document.getElementById('timer').textContent = timeLeft;
+}
+
+// Feedback Form
+document.getElementById('feedback-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const feedback = document.getElementById('feedback-text').value;
+    if (feedback.trim()) {
+        alert('Thank you for your feedback! We appreciate your suggestions.');
+        document.getElementById('feedback-text').value = '';
+    } else {
+        alert('Please enter some feedback.');
+    }
+});
+
+function openInterview(){
+    // agar click sound hai to
+    let sound = document.getElementById("clickSound");
+    if(sound) sound.play();
+
+    setTimeout(()=>{
+        window.location.href = "interview.html";
+    },300);
+}
+
+
+
+</script>
+
+</body>
+</html>

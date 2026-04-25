@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Queue | DSA Explorer</title>
+    <link rel="icon" href="fevicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(120deg, #e0eafc, #cfdef3);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, #065f46, #059669);
+            color: white;
+            text-align: center;
+            padding: 35px;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header h1 {
+            font-size: 36px;
+            animation: slideInUp 1s ease-out 0.5s both;
+        }
+
+        header p {
+            margin-top: 8px;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 1s both;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            color: #065f46;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: "🚶";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .section p {
+            color: #333;
+            font-size: 15px;
+        }
+
+        .section ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .section ul li {
+            margin-bottom: 6px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section ul li::before {
+            content: "📋";
+            color: #059669;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            padding: 15px;
+            border-left: 5px solid #059669;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(5, 150, 105, 0.1);
+        }
+
+        .practice-box {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            animation: bounceIn 1s ease-out 2s both;
+        }
+
+        .practice-box h3 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+
+        .practice-box p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .practice-box a {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+        }
+
+        .practice-box a:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 20px; margin: 20px; }
+            header { padding: 20px; }
+            header h1 { font-size: 28px; }
+            .section h2 { font-size: 20px; }
+            .practice-box a { display: block; margin: 10px 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <header>
+        <h1><i class="fas fa-list"></i> Queue</h1>
+        <p>Linear data structure based on FIFO principle</p>
+    </header>
+
+    <section class="container">
+        <!-- INTRODUCTION -->
+        <div class="section">
+            <h2>Introduction</h2>
+            <p>
+                A <b>Queue</b> is a linear data structure that follows the
+                <b>FIFO (First In First Out)</b> principle.
+                The element that is inserted first is removed first.
+            </p>
+        </div>
+
+        <!-- CHARACTERISTICS -->
+        <div class="section highlight">
+            <h2>Characteristics of Queue</h2>
+            <ul>
+                <li>Follows FIFO (First In First Out)</li>
+                <li>Insertion happens at the rear</li>
+                <li>Deletion happens from the front</li>
+                <li>Sequential access only</li>
+            </ul>
+        </div>
+
+        <!-- TYPES -->
+        <div class="section">
+            <h2>Types of Queue</h2>
+            <ul>
+                <li>Simple Queue</li>
+                <li>Circular Queue</li>
+                <li>Priority Queue</li>
+                <li>Deque (Double Ended Queue)</li>
+            </ul>
+        </div>
+
+        <!-- OPERATIONS -->
+        <div class="section highlight">
+            <h2>Basic Queue Operations</h2>
+            <ul>
+                <li>Enqueue (Insertion)</li>
+                <li>Dequeue (Deletion)</li>
+                <li>Peek / Front</li>
+                <li>IsEmpty</li>
+                <li>IsFull</li>
+            </ul>
+        </div>
+
+        <!-- COMPLEXITY -->
+        <div class="section">
+            <h2>Time Complexity</h2>
+            <ul>
+                <li>Enqueue: O(1)</li>
+                <li>Dequeue: O(1)</li>
+                <li>Peek: O(1)</li>
+            </ul>
+        </div>
+
+        <!-- APPLICATIONS -->
+        <div class="section highlight">
+            <h2>Applications of Queue</h2>
+            <ul>
+                <li>CPU Scheduling</li>
+                <li>Printer Spooling</li>
+                <li>BFS Traversal in Graph</li>
+                <li>Task Scheduling</li>
+                <li>Order Processing Systems</li>
+            </ul>
+        </div>
+
+        <!-- PRACTICE -->
+        <div class="practice-box">
+            <h3><i class="fas fa-rocket"></i> Ready to Practice Queue?</h3>
+            <p>
+                Learn Queue operations with animations and solve
+                real-world queue problems.
+            </p>
+            <a href="queue.html"><i class="fas fa-play"></i> Solve Queue Questions</a><br><br>
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </section>
+
+    <script>
+        // Particles Background
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 50 },
+                "color": { "value": "#059669" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "move": { "speed": 1, "random": true }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    anime({
+                        targets: entry.target,
+                        translateY: [20, 0],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Button Hover Animation
+        document.querySelectorAll('.practice-box a').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                anime({
+                    targets: btn,
+                    scale: 1.1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+            btn.addEventListener('mouseleave', () => {
+                anime({
+                    targets: btn,
+                    scale: 1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

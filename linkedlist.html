@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Linked List | DSA Explorer</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{background:linear-gradient(120deg,#e0e7ff,#f8fafc);height:100vh;display:flex;flex-direction:column;}
+
+header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;text-align:center;padding:15px;}
+header h1{font-size:28px;}
+header p{margin-top:5px;opacity:0.9;font-size:14px;}
+
+/* GRID DASHBOARD */
+.dashboard{display:grid;grid-template-columns:300px 1fr;gap:20px;height:calc(100vh - 70px);padding:20px;overflow:hidden;}
+
+/* LEFT PANEL: Instructions */
+.instructions-box{
+    background:#eef2ff;border-left:6px solid #2563eb;padding:20px;border-radius:12px;color:#1e3a8a;font-size:14px;line-height:1.6;overflow-y:auto;
+}
+.instructions-box ul{list-style:none;padding-left:0;}
+.instructions-box ul li{margin-bottom:10px;padding-left:24px;position:relative;font-weight:500;}
+.instructions-box ul li::before{content:"✔";position:absolute;left:0;top:0;color:#1e3a8a;font-weight:bold;}
+
+/* RIGHT PANEL: Main Panel */
+.main-panel{display:flex;flex-direction:column;gap:15px;overflow-y:auto;}
+
+/* Controls */
+.controls input, .controls select{padding:8px;margin:5px 5px 10px 0;border-radius:6px;border:1px solid #ccc;font-size:14px;}
+.controls button{background:#2563eb;color:white;border:none;padding:8px 14px;margin:4px;border-radius:6px;cursor:pointer;transition:0.2s;font-size:13px;}
+.controls button:hover{background:#1e40af;transform:scale(1.05);}
+
+/* List Area */
+.list-area{margin-top:15px;padding:20px;background:#f8fafc;border-radius:12px;overflow-x:auto;min-height:120px;display:flex;align-items:center;}
+
+/* Node styling */
+.node{display:inline-flex;align-items:center;margin-right:12px;animation:fade 0.4s;}
+.data{background:#3b82f6;color:white;padding:14px 18px;border-radius:10px;font-weight:bold;}
+.arrow{margin-left:8px;font-size:22px;color:#1e3a8a;}
+.broken{color:red;font-weight:bold;margin-left:8px;}
+.null{color:#ef4444;margin-left:10px;font-weight:bold;}
+.prev-arrow{margin-right:6px;color:#1e3a8a;font-size:20px;}
+.next-arrow{margin-left:6px;color:#1e3a8a;font-size:20px;}
+@keyframes fade{from{opacity:0;transform:translateY(-10px);}to{opacity:1;}}
+
+/* Output / Algorithm info */
+.output-box, .info-box{padding:12px;background:#f1f5f9;border-radius:12px;font-size:13px;}
+
+/* Responsive */
+@media (max-width:900px){.dashboard{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.instructions-box{max-height:200px;margin-bottom:15px;}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Linked List Visualization</h1>
+<p>Insertion, Deletion & Visual Link Breaking</p>
+</header>
+
+<div class="dashboard">
+
+    <!-- LEFT: Instructions -->
+    <div class="instructions-box">
+        <h3>Instructions</h3>
+        <ul>
+            <li>Supports <b>Singly</b>, <b>Circular</b>, <b>Doubly Linked Lists</b>.</li>
+            <li>Singly: Last node → NULL</li>
+            <li>Circular: Last node → HEAD (↺)</li>
+            <li>Doubly: Nodes show ⟵ prev and ⟶ next</li>
+            <li>Choose list type before insertion.</li>
+            <li>Insertion: Beginning / End / Position</li>
+            <li>Deletion shows broken link ❌ before removal</li>
+            <li>Search finds position of value</li>
+            <li>Traverse displays all nodes</li>
+            <li>Clear resets list</li>
+        </ul>
+    </div>
+
+    <!-- RIGHT: Main Panel -->
+    <div class="main-panel">
+
+        <!-- Controls -->
+        <div class="controls">
+            <select id="insertType">
+                <option value="begin">Insert at Beginning</option>
+                <option value="end">Insert at End</option>
+                <option value="position">Insert at Position</option>
+            </select>
+
+            <input type="number" id="value" placeholder="Value">
+            <input type="number" id="position" placeholder="Position">
+
+            <select id="mode">
+                <option value="single">Singly Linked List</option>
+                <option value="circular">Circular Linked List</option>
+                <option value="doubly">Doubly Linked List</option>
+            </select>
+
+            <br>
+            <button onclick="insertNode()">Insert</button>
+            <button onclick="deleteValue()">Delete</button>
+            <button onclick="searchValue()">Search</button>
+            <button onclick="traverse()">Traverse</button>
+            <button onclick="clearList()">Clear</button>
+        </div>
+
+        <!-- List Visualization -->
+        <div class="list-area" id="list"></div>
+
+        <!-- Output -->
+        <div class="output-box" id="output"></div>
+
+        <!-- Algorithm Info -->
+        <div class="info-box">
+            <h3>Algorithm Explanation</h3>
+            <p id="algoLine">Linked List operations process nodes sequentially using pointers.</p>
+            <p><b>Time Complexity:</b> <span id="timeC">—</span></p>
+            <p><b>Space Complexity:</b> <span id="spaceC">—</span></p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+let list=[]; let brokenIndex=null;
+
+function render(){
+    const area=document.getElementById("list"); area.innerHTML="";
+    if(list.length===0){ area.innerHTML="<p style='color:#64748b'>List is empty</p>"; return;}
+    const type=document.getElementById("mode").value;
+
+    list.forEach((val,i)=>{
+        let node=document.createElement("div"); node.className="node";
+
+        if(type==="doubly"){
+            let prev=document.createElement("span"); prev.className="prev-arrow";
+            prev.textContent=(i===0)?"NULL ⟵":"⟵"; node.appendChild(prev);
+        }
+
+        let data=document.createElement("div"); data.className="data"; data.textContent=val; node.appendChild(data);
+
+        if(i===brokenIndex){
+            let b=document.createElement("span"); b.className="broken"; b.textContent="❌"; node.appendChild(b);
+        } else if(i<list.length-1){
+            let a=document.createElement("span"); a.className="next-arrow"; a.textContent=(type==="doubly")?"⟶":"→"; node.appendChild(a);
+        } else{
+            if(type==="circular"){ let a=document.createElement("span"); a.className="next-arrow"; a.textContent="↺"; node.appendChild(a);}
+            else{ let n=document.createElement("span"); n.className="null"; n.textContent="NULL"; node.appendChild(n);}
+        }
+
+        area.appendChild(node);
+    });
+}
+
+function insertNode(){
+    let v=value.value; let type=insertType.value; let p=parseInt(position.value);
+    if(v==="") return alert("Enter value");
+
+    if(type==="begin"){ updateComplexity("O(1)","O(1)"); list.unshift(v);}
+    else if(type==="end"){ updateComplexity("O(n)","O(1)"); list.push(v);}
+    else{ updateComplexity("O(n)","O(1)"); if(isNaN(p)||p<0||p>list.length) return alert("Invalid position"); list.splice(p,0,v);}
+    brokenIndex=null; value.value=""; position.value=""; render();
+}
+
+function deleteValue(){
+    updateComplexity("O(n)","O(1)");
+    let v=value.value; let idx=list.indexOf(v);
+    if(idx===-1) return alert("Value not found");
+    brokenIndex=idx; render();
+    setTimeout(()=>{ list.splice(idx,1); brokenIndex=null; render(); },1000);
+}
+
+function searchValue(){
+    updateComplexity("O(n)","O(1)");
+    let v=value.value; let idx=list.indexOf(v);
+    document.getElementById("output").textContent=(idx===-1)?"Value not found":"Value found at position "+idx;
+}
+
+function traverse(){
+    updateComplexity("O(n)","O(1)");
+    let type=document.getElementById("mode").value;
+    document.getElementById("output").textContent=(list.length===0)?"Traversal: Empty":"Traversal: "+list.join(" → ")+" → "+(type==="circular"?"HEAD":"NULL");
+}
+
+function clearList(){ list=[]; brokenIndex=null; document.getElementById("output").textContent=""; render();}
+render();
+
+function updateComplexity(time,space){ document.getElementById("timeC").innerText=time; document.getElementById("spaceC").innerText=space;}
+</script>
+
+</body>
+</html>

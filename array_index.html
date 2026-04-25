@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Array | DSA Explorer</title>
+<link rel="icon" href="fevicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI", sans-serif;
+}
+
+body{
+    background: linear-gradient(120deg,#e0eafc,#cfdef3);
+    line-height:1.7;
+}
+
+header{
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    color:white;
+    text-align:center;
+    padding:35px;
+}
+
+header h1{
+    font-size:36px;
+}
+
+header p{
+    margin-top:8px;
+    opacity:0.9;
+}
+
+.container{
+    max-width:900px;
+    margin:40px auto;
+    background:white;
+    padding:35px;
+    border-radius:16px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.1);
+}
+
+.section{
+    margin-bottom:30px;
+}
+
+.section h2{
+    color:#1e3c72;
+    margin-bottom:10px;
+}
+
+.section p{
+    color:#333;
+    font-size:15px;
+}
+
+.section ul{
+    margin-left:20px;
+    margin-top:10px;
+}
+
+.section ul li{
+    margin-bottom:6px;
+}
+
+.highlight{
+    background:#f1f5f9;
+    padding:15px;
+    border-left:5px solid #1e3c72;
+    border-radius:10px;
+}
+
+.practice-box{
+    text-align:center;
+    margin-top:40px;
+    padding:25px;
+    background:#eaf1fc;
+    border-radius:14px;
+}
+
+.practice-box h3{
+    color:#1e3c72;
+    margin-bottom:10px;
+}
+
+.practice-box p{
+    font-size:14px;
+    margin-bottom:15px;
+}
+
+.practice-box a{
+    display:inline-block;
+    text-decoration:none;
+    background:#1e3c72;
+    color:white;
+    padding:12px 24px;
+    border-radius:10px;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.practice-box a:hover{
+    background:#16325c;
+    transform:scale(1.05);
+}
+/* Particles Background */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+header {
+    animation: fadeIn 1s ease-in-out;
+}
+
+header h1 {
+    animation: slideInUp 1s ease-out 0.5s both;
+}
+
+header p {
+    animation: slideInUp 1s ease-out 1s both;
+}
+
+.section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.section h2::before {
+    content: "📚";
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.section ul li::before {
+    content: "✓";
+    color: #1e3c72;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.practice-box {
+    animation: bounceIn 1s ease-out 2s both;
+}
+
+.practice-box h3::before {
+    content: "🚀";
+    margin-right: 10px;
+}
+
+.practice-box a::before {
+    content: "▶ ";
+}
+
+.practice-box a:last-child::before {
+    content: "⬅ ";
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container { padding: 20px; margin: 20px; }
+    header { padding: 20px; }
+    header h1 { font-size: 28px; }
+    .section h2 { font-size: 20px; }
+    .practice-box a { display: block; margin: 10px 0; }
+}
+</style>
+</head>
+
+<body>
+<div id="particles-js"></div>
+<header>
+    <h1><i class="fas fa-layer-group"></i> Array</h1>
+    <p>Complete introduction and understanding of Arrays</p>
+</header>
+
+<section class="container">
+
+    <!-- INTRODUCTION -->
+    <div class="section">
+        <h2>Introduction</h2>
+        <p>
+            An <b>Array</b> is a linear data structure used to store multiple elements 
+            of the same data type in a contiguous memory location. Each element 
+            can be accessed using an index value.
+        </p>
+    </div>
+
+    <!-- CHARACTERISTICS -->
+    <div class="section highlight">
+        <h2>Characteristics of Array</h2>
+        <ul>
+            <li>Stores elements of same data type</li>
+            <li>Uses contiguous memory allocation</li>
+            <li>Index-based access (0-based indexing)</li>
+            <li>Fast access using index</li>
+        </ul>
+    </div>
+
+    <!-- TYPES -->
+    <div class="section">
+        <h2>Types of Arrays</h2>
+        <ul>
+            <li>One-Dimensional Array</li>
+            <li>Two-Dimensional Array</li>
+            <li>Multi-Dimensional Array</li>
+        </ul>
+    </div>
+
+    <!-- OPERATIONS -->
+    <div class="section highlight">
+        <h2>Basic Array Operations</h2>
+        <ul>
+            <li>Traversal</li>
+            <li>Insertion</li>
+            <li>Deletion</li>
+            <li>Searching</li>
+            <li>Sorting</li>
+        </ul>
+    </div>
+
+    <!-- COMPLEXITY -->
+    <div class="section">
+        <h2>Time Complexity</h2>
+        <ul>
+            <li>Access: O(1)</li>
+            <li>Traversal: O(n)</li>
+            <li>Insertion/Deletion: O(n)</li>
+            <li>Searching: O(n)</li>
+        </ul>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div class="section highlight">
+        <h2>Applications of Array</h2>
+        <ul>
+            <li>Storing and processing data</li>
+            <li>Used in sorting and searching algorithms</li>
+            <li>Basis for other data structures</li>
+            <li>Used in matrices and tables</li>
+        </ul>
+    </div>
+
+    <!-- PRACTICE BUTTON -->
+    <div class="practice-box">
+        <h3>Ready to Practice?</h3>
+        <p>
+            Now that you understand Arrays, practice with visual animations
+            and solve real problems.
+        </p>
+        <a href="array.html"> → Solve Array Questions</a><br><br>
+         <a href="index.html"> ⬅ Back to Dashboard</a>
+        
+   
+
+        
+    </div>
+    
+
+</section>
+<script>
+// Particles Background
+particlesJS('particles-js', {
+    "particles": {
+        "number": { "value": 50 },
+        "color": { "value": "#1e3c72" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
+        "size": { "value": 3 },
+        "move": { "speed": 1, "random": true }
+    },
+    "interactivity": {
+        "detect_on": "canvas",
+        "events": { "onhover": { "enable": true, "mode": "repulse" } }
+    }
+});
+
+// Scroll Animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            anime({
+                targets: entry.target,
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutQuad'
+            });
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.section').forEach(section => {
+    observer.observe(section);
+});
+
+// Button Hover Animation
+document.querySelectorAll('.practice-box a').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+        anime({
+            targets: btn,
+            scale: 1.1,
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+    });
+    btn.addEventListener('mouseleave', () => {
+        anime({
+            targets: btn,
+            scale: 1,
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+    });
+});
+</script>
+</body>
+</html>
